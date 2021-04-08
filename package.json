@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev":"nodemon start"
+    "server":"nodemon start",
+    "client":"npm start --prefix client",
+   "dev": "concurrently \"npm run server\" \"npm run client\""
+
   },
   "dependencies": {
     "config": "^3.3.6",

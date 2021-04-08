@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
@@ -22,8 +23,12 @@ const Navbar = () => {
         <Typography variant="h6" className={classes.title} color="primary">
           Reminder
         </Typography>
-        <Button color="primary">Login</Button>
-        <Button color="primary">Sign Up</Button>
+        <Link to="/login">
+          <Button color="primary">Login</Button>
+        </Link>
+        <Link to="/register">
+          <Button color="primary">Sign Up</Button>
+        </Link>
       </Toolbar>
     </AppBar>
   );

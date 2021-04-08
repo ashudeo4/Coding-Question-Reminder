@@ -4,28 +4,22 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(config.get("googleCliendId"));
-const { BadRequest } = require("../utils/errors");
 const User = require("../models/Users");
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
-});
+const { BadRequest } = require("../utils/errors");
 
-//Register users
-router.post("/", async (req, res, next) => {
+router.post("/google", async (req, res, next) => {
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: config.get("googleCliendId"),
   });
-  const { name, email, picture } = ticket.getPayload();
+  const { email } = ticket.getPayload();
   try {
     const user = await User.findOne({ email });
-    if (user) {
-      throw new BadRequest("User already exits");
+    if (!user) {
+      throw new BadRequest("You are not signed up");
     }
-    const savedUser = await User.create({ name, email, picture });
-    const payload = { user: { id: savedUser._id } };
+    const payload = { user: { id: user._id } };
     const token = await jwt.sign(payload, config.get("jwtSecret"), {
       expiresIn: 36000,
     });

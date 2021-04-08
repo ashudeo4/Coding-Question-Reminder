@@ -4,9 +4,17 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import GoogleLogin from "react-google-login";
 const Login = (props) => {
-  const responseGoogle = (res) => {
-    console.log(res);
+  const responseGoogle = async (googleData) => {
+    const res = await fetch("http://localhost:5000/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ token: googleData.tokenId }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    console.log(data);
   };
+
   return (
     <Box component="div" mt={10}>
       <Typography variant="h3" component="h1" color="primary" align="center">

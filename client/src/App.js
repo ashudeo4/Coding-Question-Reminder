@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
@@ -6,6 +7,17 @@ import Default from "./components/layout/Default";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
+import Alert from "./components/layout/Alert";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import { loadUser } from "./action/auth";
+import setAuthToken from "./utils/setAuthToken";
+//Redux setup
+import { Provider } from "react-redux";
+import store from "./store";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -14,17 +26,24 @@ const theme = createMuiTheme({
   },
 });
 function App() {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <Navbar />
-        <Route exact path="/" component={Default} />
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/dashboard" component={Dashboard} />
-        </Switch>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <Navbar />
+          <Alert />
+          <Route exact path="/" component={Default} />
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            {/* <Route exact path="/dashboard" component={Dashboard} /> */}
+            <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          </Switch>
+        </Router>
+      </Provider>
     </ThemeProvider>
   );
 }

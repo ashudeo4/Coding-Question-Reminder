@@ -6,8 +6,18 @@ const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(config.get("googleCliendId"));
 const User = require("../models/Users");
 const { BadRequest } = require("../utils/errors");
+const auth = require("../middlewares/auth");
 
-router.post("/google", async (req, res, next) => {
+router.get("/", auth, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    return res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/", async (req, res, next) => {
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,

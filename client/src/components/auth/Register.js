@@ -1,19 +1,18 @@
 import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import GoogleLogin from "react-google-login";
-const Register = () => {
+import { register } from "../../action/auth";
+const Register = ({ register, isAuthenticated }) => {
   const responseGoogle = async (googleData) => {
-    const res = await fetch("http://localhost:5000/api/users", {
-      method: "POST",
-      body: JSON.stringify({ token: googleData.tokenId }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const data = await res.json();
-    console.log(data);
+    register(googleData.tokenId);
   };
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <Box component="div" mt={10}>
       <Typography variant="h3" component="h1" color="primary" align="center">
@@ -43,5 +42,7 @@ const Register = () => {
     </Box>
   );
 };
-
-export default Register;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { register })(Register);

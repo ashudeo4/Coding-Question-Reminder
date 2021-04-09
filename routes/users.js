@@ -13,6 +13,7 @@ router.get("/", function (req, res, next) {
 
 //Register users
 router.post("/", async (req, res, next) => {
+  console.log("register");
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,

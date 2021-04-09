@@ -28,7 +28,7 @@ const Login = ({ login, isAuthenticated }) => {
               size="large"
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
-              startIcon={<i class="fab fa-google" />}
+              startIcon={<i className="fab fa-google" />}
             >
               Continue with Google
             </Button>

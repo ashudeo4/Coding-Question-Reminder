@@ -72,7 +72,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
       />
 
       <Menu
-        elevation="0"
+        elevation="1"
         classes={{ paper: classes.menuPaper }}
         id="simple-menu"
         anchorEl={anchorEl}

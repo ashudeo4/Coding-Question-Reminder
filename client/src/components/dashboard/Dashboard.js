@@ -24,7 +24,7 @@ const Dashboard = () => {
   });
   return (
     <Fragment>
-      <Box mx={10} mt={2}>
+      <Box mx={10} mt={5}>
         <Grid container spacing={4}>
           {Cards}
         </Grid>

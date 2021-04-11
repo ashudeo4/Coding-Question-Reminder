@@ -71,7 +71,6 @@ export const login = (googleToken) => async (dispatch) => {
     });
     dispatch(loadUser());
   } catch (err) {
-    console.log(err);
     const error = err.response.data;
     if (error) {
       dispatch(setAlert(error.message, "error"));

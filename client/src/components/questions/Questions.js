@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -11,8 +11,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { connect } from "react-redux";
-
-import { Route } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -20,8 +18,12 @@ const useStyles = makeStyles({
 });
 
 const Questions = ({ leetcode }) => {
-  console.log(leetcode);
-
+  console.log({ leetcode });
+  if (leetcode.length > 0) {
+    localStorage.setItem("leetcode", JSON.stringify(leetcode));
+  } else {
+    leetcode = JSON.parse(localStorage.getItem("leetcode"));
+  }
   const easyQuestion = leetcode.filter((ques) => ques.difficulty === "EASY");
   const mediumQuestion = leetcode.filter(
     (ques) => ques.difficulty === "MEDIUM"

@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  console.log("user", user);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

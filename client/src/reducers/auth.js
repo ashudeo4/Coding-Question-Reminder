@@ -42,6 +42,7 @@ export default function (state = initialState, action) {
     case LOGOUT:
     case ACCOUNT_DELETED:
       localStorage.removeItem("token");
+      localStorage.removeItem("leetcode");
       return {
         ...state,
         token: null,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -42,6 +42,7 @@ const useStylesProgress = makeStyles((theme) => ({
 }));
 
 const SimpleCard = ({ name, totalQuestions, completedQuestions, history }) => {
+  console.log(totalQuestions);
   const classes = useStyles();
   const classesProgress = useStylesProgress();
   let progressValue = (completedQuestions / totalQuestions) * 100;

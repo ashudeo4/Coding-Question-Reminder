@@ -9,7 +9,7 @@ const connectDB = require("./config/database");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
-
+const questionRouter = require("./routes/questions");
 var app = express();
 connectDB();
 app.use(cors());
@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/question", questionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

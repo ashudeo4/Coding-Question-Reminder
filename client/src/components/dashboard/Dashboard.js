@@ -1,9 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Card from "../layout/SimpleCard";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-
-const Dashboard = () => {
+import { connect } from "react-redux";
+import { getLeetcodeQuestion } from "../../action/question";
+const Dashboard = ({
+  getLeetcodeQuestion,
+  leetcode,
+  totalLeetcodeQuestions,
+}) => {
+  useEffect(() => {
+    getLeetcodeQuestion();
+  }, [getLeetcodeQuestion]);
   const [listOfPlatforms, setListOfPlatforms] = useState([
     { id: 1, name: "Leetcode", totalQuestions: 75, completedQuestions: 15 },
     { id: 2, name: "Algoexpert", totalQuestions: 150, completedQuestions: 50 },
@@ -16,7 +24,7 @@ const Dashboard = () => {
         <Card
           key={platform.id}
           name={platform.name}
-          totalQuestions={platform.totalQuestions}
+          totalQuestions={totalLeetcodeQuestions}
           completedQuestions={platform.completedQuestions}
         />
       </Grid>
@@ -33,4 +41,8 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  leetcode: state.question.leetcode,
+  totalLeetcodeQuestions: state.question.totalLeetcodeQuestions,
+});
+export default connect(mapStateToProps, { getLeetcodeQuestion })(Dashboard);

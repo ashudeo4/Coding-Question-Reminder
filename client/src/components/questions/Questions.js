@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -11,18 +11,32 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { connect } from "react-redux";
+import { setReminder, removeReminder } from "../../action/question";
 const useStyles = makeStyles({
   root: {
     width: "100%",
   },
 });
 
-const Questions = ({ leetcode }) => {
-  console.log({ leetcode });
+const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
+  const reminder = (e, quesId) => {
+    if (e.target.checked) {
+      setReminder(user._id, quesId);
+      console.log("setting reminder", user._id, quesId);
+    } else {
+      removeReminder(user._id, quesId);
+      console.log("removing reminder");
+    }
+  };
   if (leetcode.length > 0) {
     localStorage.setItem("leetcode", JSON.stringify(leetcode));
   } else {
     leetcode = JSON.parse(localStorage.getItem("leetcode"));
+  }
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    user = JSON.parse(localStorage.getItem("user"));
   }
   const easyQuestion = leetcode.filter((ques) => ques.difficulty === "EASY");
   const mediumQuestion = leetcode.filter(
@@ -32,7 +46,7 @@ const Questions = ({ leetcode }) => {
   const classes = useStyles();
   const easy = easyQuestion.map((ques) => {
     return (
-      <div className={classes.root}>
+      <div className={classes.root} key={ques._id}>
         <Accordion style={{ backgroundColor: "#1d1d27", color: "white" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
@@ -44,13 +58,18 @@ const Questions = ({ leetcode }) => {
               aria-label="Acknowledge"
               onClick={(event) => event.stopPropagation()}
               onFocus={(event) => event.stopPropagation()}
-              control={<Checkbox style={{ color: "white" }} />}
+              control={
+                <Checkbox
+                  style={{ color: "white" }}
+                  onChange={(e) => reminder(e, ques._id)}
+                />
+              }
               label={ques.name}
             />
           </AccordionSummary>
           <AccordionDetails>
             <Typography color="primary">
-              <Link href={ques.link} target="_blank">
+              <Link href={ques.link} target="_blank" rel="noreferrer">
                 Goto
               </Link>
             </Typography>
@@ -61,7 +80,7 @@ const Questions = ({ leetcode }) => {
   });
   const medium = mediumQuestion.map((ques) => {
     return (
-      <div className={classes.root}>
+      <div className={classes.root} key={ques._id}>
         <Accordion style={{ backgroundColor: "#1d1d27", color: "white" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
@@ -79,7 +98,7 @@ const Questions = ({ leetcode }) => {
           </AccordionSummary>
           <AccordionDetails>
             <Typography color="primary">
-              <Link href={ques.link} target="_blank">
+              <Link href={ques.link} target="_blank" rel="noreferrer">
                 Goto
               </Link>
             </Typography>
@@ -90,7 +109,7 @@ const Questions = ({ leetcode }) => {
   });
   const hard = hardQuestion.map((ques) => {
     return (
-      <div className={classes.root}>
+      <div className={classes.root} key={ques._id}>
         <Accordion style={{ backgroundColor: "#1d1d27", color: "white" }}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
@@ -108,7 +127,7 @@ const Questions = ({ leetcode }) => {
           </AccordionSummary>
           <AccordionDetails>
             <Typography color="primary">
-              <Link href={ques.link} target="_blank">
+              <Link href={ques.link} target="_blank" rel="noreferrer">
                 Goto
               </Link>
             </Typography>
@@ -153,5 +172,8 @@ const Questions = ({ leetcode }) => {
 };
 const mapStateToProps = (state) => ({
   leetcode: state.question.leetcode,
+  user: state.auth.user,
 });
-export default connect(mapStateToProps)(Questions);
+export default connect(mapStateToProps, { setReminder, removeReminder })(
+  Questions
+);

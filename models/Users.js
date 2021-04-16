@@ -20,18 +20,8 @@ const UserSchema = new mongoose.Schema({
   },
   questionsCompleted: [
     {
-      questionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "question",
-      },
-      status: {
-        type: Boolean,
-        default: false,
-      },
-      date: {
-        type: Date,
-        default: Date.now,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "userquestion",
     },
   ],
 });

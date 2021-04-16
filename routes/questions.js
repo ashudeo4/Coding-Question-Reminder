@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
 const User = require("../models/Users");
+const UserQuestions = require("../models/UserQuestions");
 const Question = require("../models/Questions");
 const { BadRequest } = require("../utils/errors");
-
+const moment = require("moment");
 router.post("/", async (req, res, next) => {
   try {
     const { name, level, url } = req.body;
@@ -34,4 +35,38 @@ router.get("/:type", async (req, res, next) => {
   }
 });
 
+router.post("/reminder/:userId/:questionId", async (req, res, next) => {
+  try {
+    const questionExists = await UserQuestions.findOne({
+      questionId: req.params.questionId,
+      userId: req.params.userId,
+    });
+    if (questionExists) {
+      throw new BadRequest("Already reminder has been set");
+    }
+    const nextThreeDays = moment().add(3, "days").toDate();
+    const nextSevenDays = moment().add(7, "days").toDate();
+    const nextThirtyDays = moment().add(30, "days").toDate();
+    const reminderData = new UserQuestions({
+      questionId: req.params.questionId,
+      userId: req.params.userId,
+      status: true,
+    });
+    reminderData.dateReminder.push(
+      nextThreeDays,
+      nextSevenDays,
+      nextThirtyDays
+    );
+    const savedReminder = await reminderData.save();
+    const userData = await User.findOne({
+      _id: req.params.userId,
+    });
+    userData.questionsCompleted.push(savedReminder._id);
+    await userData.save();
+    return res.status(201).json({ message: "Reminder set" });
+  } catch (err) {
+    next(err);
+  }
+});
+router.put("/reminder/:userId/:questionId", async (req, res, next) => {});
 module.exports = router;

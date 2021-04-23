@@ -10,7 +10,7 @@ const auth = require("../middlewares/auth");
 
 router.get("/", auth, async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id).select("-questionsCompleted");
     return res.json(user);
   } catch (err) {
     next(err);

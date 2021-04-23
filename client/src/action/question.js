@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_LEETCODE_QUESTIONS } from "./types";
+import { GET_LEETCODE_QUESTIONS, USER_LEETCODE_QUESTIONS } from "./types";
 import { setAlert } from "./alert";
 
 export const getLeetcodeQuestion = () => async (dispatch) => {
@@ -11,6 +11,14 @@ export const getLeetcodeQuestion = () => async (dispatch) => {
   }
 };
 
+export const userLeetcodeQuestions = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/api/question/user");
+    dispatch({ type: USER_LEETCODE_QUESTIONS, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 export const setReminder = (userId, questionId) => async (dispatch) => {
   const config = {
     headers: {
@@ -20,11 +28,9 @@ export const setReminder = (userId, questionId) => async (dispatch) => {
   try {
     const res = await axios.post(
       `/api/question/reminder/${userId}/${questionId}`,
-
       config
     );
     dispatch(setAlert(res.data.message, "success"));
-    console.log(res.data);
   } catch (err) {
     const error = err.response.data;
     if (error) {
@@ -33,9 +39,18 @@ export const setReminder = (userId, questionId) => async (dispatch) => {
   }
 };
 
-export const removeReminder = () => async (dispatch) => {
+export const removeReminder = (userId, questionId) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
   try {
-    dispatch(setAlert("Reminder removed", "success"));
+    const res = await axios.put(
+      `/api/question/reminder/${userId}/${questionId}`,
+      config
+    );
+    dispatch(setAlert(res.data.message, "success"));
   } catch (err) {
     const error = err.response.data;
     if (error) {

@@ -1,7 +1,11 @@
-import { GET_LEETCODE_QUESTIONS } from "../action/types";
+import {
+  GET_LEETCODE_QUESTIONS,
+  USER_LEETCODE_QUESTIONS,
+} from "../action/types";
 const initialState = {
   leetcode: [],
   totalLeetcodeQuestions: null,
+  userLeetcodeQuestions: [],
   algoexpert: [],
   custom: [],
   Favorite: [],
@@ -16,6 +20,11 @@ export default function (state = initialState, action) {
         ...state,
         leetcode: payload.questionData,
         totalLeetcodeQuestions: payload.totalQuestion,
+      };
+    case USER_LEETCODE_QUESTIONS:
+      return {
+        ...state,
+        userLeetcodeQuestions: payload,
       };
     default:
       return state;

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Moment from "react-moment";
 import { makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -10,22 +11,49 @@ import Box from "@material-ui/core/Box";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+import { ListItem, ListItemText, List } from "@material-ui/core";
 import { connect } from "react-redux";
-import { setReminder, removeReminder } from "../../action/question";
+import {
+  setReminder,
+  removeReminder,
+  userLeetcodeQuestions,
+} from "../../action/question";
 const useStyles = makeStyles({
   root: {
     width: "100%",
   },
 });
 
-const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
+const Questions = ({
+  leetcode,
+  user,
+  setReminder,
+  removeReminder,
+  userQuestions,
+  userLeetcodeQuestions,
+}) => {
+  useEffect(() => {
+    userLeetcodeQuestions();
+  }, [userLeetcodeQuestions]);
+  const printReminderDate = (id) => {
+    const data = userQuestions.find((ele) => ele.questionId === id);
+    if (data) {
+      const component = data.dateReminder.map((date, index) => (
+        <ListItem>
+          <ListItemText primary={index + 1 + "'s Reminder:-"} />
+          <ListItemText primary={<Moment format="DD/MM/YY">{date}</Moment>} />
+        </ListItem>
+      ));
+      return component;
+    }
+  };
   const reminder = (e, quesId) => {
     if (e.target.checked) {
       setReminder(user._id, quesId);
-      console.log("setting reminder", user._id, quesId);
+      userLeetcodeQuestions();
     } else {
       removeReminder(user._id, quesId);
-      console.log("removing reminder");
+      userLeetcodeQuestions();
     }
   };
   if (leetcode.length > 0) {
@@ -60,8 +88,13 @@ const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
               onFocus={(event) => event.stopPropagation()}
               control={
                 <Checkbox
-                  style={{ color: "white" }}
+                  checked={
+                    userQuestions.find((ele) => ele.questionId === ques._id)
+                      ? true
+                      : false
+                  }
                   onChange={(e) => reminder(e, ques._id)}
+                  style={{ color: "white" }}
                 />
               }
               label={ques.name}
@@ -70,8 +103,13 @@ const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
           <AccordionDetails>
             <Typography color="primary">
               <Link href={ques.link} target="_blank" rel="noreferrer">
-                Goto
+                Goto Question
               </Link>
+              <div className={classes.root}>
+                <List component="nav" aria-label="main mailbox folders">
+                  {printReminderDate(ques._id)}
+                </List>
+              </div>
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -92,15 +130,30 @@ const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
               aria-label="Acknowledge"
               onClick={(event) => event.stopPropagation()}
               onFocus={(event) => event.stopPropagation()}
-              control={<Checkbox style={{ color: "white" }} />}
+              control={
+                <Checkbox
+                  style={{ color: "white" }}
+                  checked={
+                    userQuestions.find((ele) => ele.questionId === ques._id)
+                      ? true
+                      : false
+                  }
+                  onChange={(e) => reminder(e, ques._id)}
+                />
+              }
               label={ques.name}
             />
           </AccordionSummary>
           <AccordionDetails>
             <Typography color="primary">
               <Link href={ques.link} target="_blank" rel="noreferrer">
-                Goto
+                Goto Question
               </Link>
+              <div className={classes.root}>
+                <List component="nav" aria-label="main mailbox folders">
+                  {printReminderDate(ques._id)}
+                </List>
+              </div>
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -121,15 +174,30 @@ const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
               aria-label="Acknowledge"
               onClick={(event) => event.stopPropagation()}
               onFocus={(event) => event.stopPropagation()}
-              control={<Checkbox style={{ color: "white" }} />}
+              control={
+                <Checkbox
+                  style={{ color: "white" }}
+                  checked={
+                    userQuestions.find((ele) => ele.questionId === ques._id)
+                      ? true
+                      : false
+                  }
+                  onChange={(e) => reminder(e, ques._id)}
+                />
+              }
               label={ques.name}
             />
           </AccordionSummary>
           <AccordionDetails>
             <Typography color="primary">
               <Link href={ques.link} target="_blank" rel="noreferrer">
-                Goto
+                Goto Question
               </Link>
+              <div className={classes.root}>
+                <List component="nav" aria-label="main mailbox folders">
+                  {printReminderDate(ques._id)}
+                </List>
+              </div>
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -173,7 +241,10 @@ const Questions = ({ leetcode, user, setReminder, removeReminder }) => {
 const mapStateToProps = (state) => ({
   leetcode: state.question.leetcode,
   user: state.auth.user,
+  userQuestions: state.question.userLeetcodeQuestions,
 });
-export default connect(mapStateToProps, { setReminder, removeReminder })(
-  Questions
-);
+export default connect(mapStateToProps, {
+  setReminder,
+  removeReminder,
+  userLeetcodeQuestions,
+})(Questions);

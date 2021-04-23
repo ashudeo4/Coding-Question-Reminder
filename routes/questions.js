@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const User = require("../models/Users");
 const UserQuestions = require("../models/UserQuestions");
+const loginMiddleware = require("../middlewares/auth");
 const Question = require("../models/Questions");
 const { BadRequest } = require("../utils/errors");
 const moment = require("moment");
@@ -19,7 +20,14 @@ router.post("/", async (req, res, next) => {
     next(err);
   }
 });
-
+router.get("/user", loginMiddleware, async (req, res, next) => {
+  try {
+    const userQuestions = await UserQuestions.find({ userId: req.user.id });
+    return res.status(200).json(userQuestions);
+  } catch (err) {
+    next(err);
+  }
+});
 router.get("/:type", async (req, res, next) => {
   try {
     const { type } = req.params;
@@ -68,5 +76,21 @@ router.post("/reminder/:userId/:questionId", async (req, res, next) => {
     next(err);
   }
 });
-router.put("/reminder/:userId/:questionId", async (req, res, next) => {});
+router.put("/reminder/:userId/:questionId", async (req, res, next) => {
+  try {
+    const deletedData = await UserQuestions.findOneAndDelete({
+      userId: req.params.userId,
+      questionId: req.params.questionId,
+    });
+    const userData = await User.findOne({ _id: req.params.userId });
+    const removedArray = userData.questionsCompleted.filter((quesid) => {
+      return quesid.toString() !== deletedData._id.toString();
+    });
+    userData.questionsCompleted = removedArray;
+    await userData.save();
+    return res.status(200).json({ message: "Reminder removed" });
+  } catch (err) {
+    next(err);
+  }
+});
 module.exports = router;

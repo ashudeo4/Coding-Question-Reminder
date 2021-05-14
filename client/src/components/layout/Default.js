@@ -1,8 +1,13 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import { Box } from "@material-ui/core";
+import { connect } from "react-redux";
 
-const Default = () => {
+const Default = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <Box component="div" height="100">
       <Box
@@ -29,5 +34,8 @@ const Default = () => {
     </Box>
   );
 };
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
 
-export default Default;
+})
+export default connect(mapStateToProps, {})(Default);

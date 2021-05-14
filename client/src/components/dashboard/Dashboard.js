@@ -15,7 +15,7 @@ const Dashboard = ({
   const [listOfPlatforms, setListOfPlatforms] = useState([
     { id: 1, name: "Leetcode", totalQuestions: 75, completedQuestions: 15 },
     { id: 2, name: "Algoexpert", totalQuestions: 150, completedQuestions: 50 },
-    { id: 3, name: "Custom", totalQuestions: 150, completedQuestions: 200 },
+    { id: 3, name: "Custom", totalQuestions: 150, completedQuestions: 20 },
     { id: 4, name: "Favorite", totalQuestions: 10, completedQuestions: 10 },
   ]);
   const Cards = listOfPlatforms.map((platform) => {

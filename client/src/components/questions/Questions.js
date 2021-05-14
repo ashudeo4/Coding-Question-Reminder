@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
+import Skeleton from '@material-ui/lab/Skeleton';
+
 import { connect } from "react-redux";
 import {
   setReminder,
@@ -49,38 +51,42 @@ const Questions = ({
   const hard = hardQuestion.map((ques) => {
     return <QuestionsList ques={ques} removeReminder={removeReminder} userId={user._id} setReminder={setReminder} userQuestions={userQuestions} />;
   });
-  return (
-    <Box mx={5} py={5}>
-      <Typography color="primary" variant="h3" align="center">
-        Leetcode
+  const page = (<Box mx={5} py={5}>
+    <Typography color="primary" variant="h3" align="center">
+      Leetcode
       </Typography>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={4}>
-          <Box my={2}>
-            <Typography variant="h4" color="primary" align="center">
-              Easy
+    <Grid container spacing={4}>
+      <Grid item xs={12} sm={4}>
+        <Box my={2}>
+          <Typography variant="h4" color="primary" align="center">
+            Easy
             </Typography>
-          </Box>
-          {easy}
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Box my={2}>
-            <Typography variant="h4" color="primary" align="center">
-              Medium
-            </Typography>
-          </Box>
-          {medium}
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Box my={2}>
-            <Typography variant="h4" color="primary" align="center">
-              Hard
-            </Typography>
-          </Box>
-          {hard}
-        </Grid>
+        </Box>
+        {easy}
       </Grid>
-    </Box>
+      <Grid item xs={12} sm={4}>
+        <Box my={2}>
+          <Typography variant="h4" color="primary" align="center">
+            Medium
+            </Typography>
+        </Box>
+        {medium}
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <Box my={2}>
+          <Typography variant="h4" color="primary" align="center">
+            Hard
+            </Typography>
+        </Box>
+        {hard}
+      </Grid>
+    </Grid>
+  </Box>)
+  return (
+
+
+    user ? page : <Skeleton animation="wave" height="100" width="80%" />
+
   );
 };
 const mapStateToProps = (state) => ({

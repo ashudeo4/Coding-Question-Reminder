@@ -13,6 +13,7 @@ router.post("/", async (req, res, next) => {
       name: name.substring(name.indexOf(" ")),
       difficulty: level.toUpperCase(),
       link: url,
+      type: "LEETCODE"
     };
     await Question.create(questionData);
     res.status(201).json({ message: "Question Added" });
@@ -35,6 +36,7 @@ router.get("/:type", async (req, res, next) => {
     if (questionData.length == 0) {
       throw new BadRequest(`No question available for ${type} platform`);
     }
+    console.log(questionData);
     return res
       .status(200)
       .json({ questionData, totalQuestion: questionData.length });
@@ -44,6 +46,7 @@ router.get("/:type", async (req, res, next) => {
 });
 
 router.post("/reminder/:userId/:questionId", async (req, res, next) => {
+  console.log(req.body);
   try {
     const questionExists = await UserQuestions.findOne({
       questionId: req.params.questionId,
@@ -52,9 +55,10 @@ router.post("/reminder/:userId/:questionId", async (req, res, next) => {
     if (questionExists) {
       throw new BadRequest("Already reminder has been set");
     }
-    const nextThreeDays = moment().add(3, "days").toDate();
-    const nextSevenDays = moment().add(7, "days").toDate();
-    const nextThirtyDays = moment().add(30, "days").toDate();
+    const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body
+    // const nextThreeDays = moment().add(3, "days").toDate();
+    // const nextSevenDays = moment().add(7, "days").toDate();
+    // const nextThirtyDays = moment().add(30, "days").toDate();
     const reminderData = new UserQuestions({
       questionId: req.params.questionId,
       userId: req.params.userId,

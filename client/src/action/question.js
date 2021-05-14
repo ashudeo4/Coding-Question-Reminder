@@ -19,15 +19,16 @@ export const userLeetcodeQuestions = () => async (dispatch) => {
     console.log(err.message);
   }
 };
-export const setReminder = (userId, questionId) => async (dispatch) => {
+export const setReminder = (userId, questionId, nextThreeDays, nextSevenDays, nextThirtyDays) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  const formData = { nextThreeDays, nextSevenDays, nextThirtyDays }
   try {
     const res = await axios.post(
-      `/api/question/reminder/${userId}/${questionId}`,
+      `/api/question/reminder/${userId}/${questionId}`, formData,
       config
     );
     dispatch(setAlert(res.data.message, "success"));

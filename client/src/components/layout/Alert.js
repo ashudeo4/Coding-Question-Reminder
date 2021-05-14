@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Alert as MaterialAlert } from "@material-ui/lab/";
 const Alert = ({ alerts }) => {
-  console.log(alerts);
   return (
     alerts !== null &&
     alerts.length > 0 &&

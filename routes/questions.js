@@ -5,7 +5,6 @@ const UserQuestions = require("../models/UserQuestions");
 const loginMiddleware = require("../middlewares/auth");
 const Question = require("../models/Questions");
 const { BadRequest } = require("../utils/errors");
-const moment = require("moment");
 router.post("/", async (req, res, next) => {
   try {
     const { name, level, url } = req.body;
@@ -15,7 +14,8 @@ router.post("/", async (req, res, next) => {
       link: url,
       type: "LEETCODE"
     };
-    await Question.create(questionData);
+    // console.log(req.body);
+    await Question.create(questionData);//changing for Algoexpert
     res.status(201).json({ message: "Question Added" });
   } catch (err) {
     next(err);
@@ -56,9 +56,7 @@ router.post("/reminder/:userId/:questionId", async (req, res, next) => {
       throw new BadRequest("Already reminder has been set");
     }
     const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body
-    // const nextThreeDays = moment().add(3, "days").toDate();
-    // const nextSevenDays = moment().add(7, "days").toDate();
-    // const nextThirtyDays = moment().add(30, "days").toDate();
+
     const reminderData = new UserQuestions({
       questionId: req.params.questionId,
       userId: req.params.userId,

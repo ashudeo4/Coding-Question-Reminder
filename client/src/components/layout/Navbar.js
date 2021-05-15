@@ -49,10 +49,10 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
       <Typography variant="h6" className={classes.title} color="primary">
         Reminder
       </Typography>
-      <Link to="/login">
+      <Link to="/login" style={{ color: "white", "text-decoration": "none" }}>
         <Button color="primary">Login</Button>
       </Link>
-      <Link to="/register">
+      <Link to="/register" style={{ color: "white", "text-decoration": "none" }}>
         <Button color="primary">Sign Up</Button>
       </Link>
     </Toolbar>
@@ -92,11 +92,15 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             </Typography>
           </Box>
         </MenuItem>
+
+        <MenuItem style={{ color: "white" }}>
+          <Link style={{ color: "white", "text-decoration": "none" }} to="/dashboard">Dashboard</Link>
+        </MenuItem>
         <MenuItem style={{ color: "white" }} onClick={handleLogout}>
-          Logout
+          Log Out
         </MenuItem>
       </Menu>
-    </Toolbar>
+    </Toolbar >
   );
   return (
     <AppBar position="static" color="secondary" elevation="0">

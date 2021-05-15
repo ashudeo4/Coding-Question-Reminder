@@ -45,7 +45,7 @@ router.get("/user", loginMiddleware, async (req, res, next) => {
     next(err);
   }
 });
-router.get("/:type", async (req, res, next) => {
+router.get("/:type", loginMiddleware, async (req, res, next) => {
   try {
     const { type } = req.params;
     const questionData = await Question.find({ type: type.toUpperCase() });
@@ -60,55 +60,63 @@ router.get("/:type", async (req, res, next) => {
   }
 });
 
-router.post("/reminder/:userId/:questionId", async (req, res, next) => {
-  try {
-    const questionExists = await UserQuestions.findOne({
-      questionId: req.params.questionId,
-      userId: req.params.userId,
-    });
-    if (questionExists) {
-      throw new BadRequest("Already reminder has been set");
-    }
-    const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body;
+router.post(
+  "/reminder/:userId/:questionId",
+  loginMiddleware,
+  async (req, res, next) => {
+    try {
+      const questionExists = await UserQuestions.findOne({
+        questionId: req.params.questionId,
+        userId: req.params.userId,
+      });
+      if (questionExists) {
+        throw new BadRequest("Already reminder has been set");
+      }
+      const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body;
 
-    const reminderData = new UserQuestions({
-      questionId: req.params.questionId,
-      userId: req.params.userId,
-      status: true,
-      type: req.body.type,
-    });
-    reminderData.dateReminder.push(
-      nextThreeDays,
-      nextSevenDays,
-      nextThirtyDays
-    );
-    const savedReminder = await reminderData.save();
-    const userData = await User.findOne({
-      _id: req.params.userId,
-    });
-    userData.questionsCompleted.push(savedReminder._id);
-    await userData.save();
-    return res.status(201).json({ message: "Reminder set" });
-  } catch (err) {
-    next(err);
+      const reminderData = new UserQuestions({
+        questionId: req.params.questionId,
+        userId: req.params.userId,
+        status: true,
+        type: req.body.type,
+      });
+      reminderData.dateReminder.push(
+        nextThreeDays,
+        nextSevenDays,
+        nextThirtyDays
+      );
+      const savedReminder = await reminderData.save();
+      const userData = await User.findOne({
+        _id: req.params.userId,
+      });
+      userData.questionsCompleted.push(savedReminder._id);
+      await userData.save();
+      return res.status(201).json({ message: "Reminder set" });
+    } catch (err) {
+      next(err);
+    }
   }
-});
-router.put("/reminder/:userId/:questionId", async (req, res, next) => {
-  try {
-    const deletedData = await UserQuestions.findOneAndDelete({
-      userId: req.params.userId,
-      questionId: req.params.questionId,
-    });
-    const userData = await User.findOne({ _id: req.params.userId });
-    const removedArray = userData.questionsCompleted.filter((quesid) => {
-      return quesid.toString() !== deletedData._id.toString();
-    });
-    userData.questionsCompleted = removedArray;
-    await userData.save();
-    return res.status(200).json({ message: "Reminder removed" });
-  } catch (err) {
-    next(err);
+);
+router.put(
+  "/reminder/:userId/:questionId",
+  loginMiddleware,
+  async (req, res, next) => {
+    try {
+      const deletedData = await UserQuestions.findOneAndDelete({
+        userId: req.params.userId,
+        questionId: req.params.questionId,
+      });
+      const userData = await User.findOne({ _id: req.params.userId });
+      const removedArray = userData.questionsCompleted.filter((quesid) => {
+        return quesid.toString() !== deletedData._id.toString();
+      });
+      userData.questionsCompleted = removedArray;
+      await userData.save();
+      return res.status(200).json({ message: "Reminder removed" });
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 module.exports = router;

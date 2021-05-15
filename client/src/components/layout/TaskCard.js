@@ -77,7 +77,7 @@ const TaskCard = ({ todayQuestions, getTodayQuestions }) => {
         {todayQuestions.length > 0 ? (
           tasks
         ) : (
-          <Typography variant="h6" component="h2" color="black" gutterBottom>
+          <Typography variant="h6" component="h2" color="primary" gutterBottom>
             No questions
           </Typography>
         )}

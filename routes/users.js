@@ -1,11 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const config = require("config");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(config.get("googleCliendId"));
+const client = new OAuth2Client(process.env.GoogleClientID);
 const { BadRequest } = require("../utils/errors");
 const User = require("../models/Users");
+require("dotenv").config();
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
@@ -16,7 +16,7 @@ router.post("/", async (req, res, next) => {
   const { token } = req.body;
   const ticket = await client.verifyIdToken({
     idToken: token,
-    audience: config.get("googleCliendId"),
+    audience: process.env.GoogleClientID,
   });
   const { name, email, picture } = ticket.getPayload();
   try {
@@ -26,7 +26,7 @@ router.post("/", async (req, res, next) => {
     }
     const savedUser = await User.create({ name, email, picture });
     const payload = { user: { id: savedUser._id } };
-    const token = await jwt.sign(payload, config.get("jwtSecret"), {
+    const token = await jwt.sign(payload, process.env.JWTSECRET, {
       expiresIn: 36000,
     });
     return res.status(200).json({ token });

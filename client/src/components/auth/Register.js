@@ -20,7 +20,7 @@ const Register = ({ register, isAuthenticated }) => {
       </Typography>
       <Box component="div" mt={5} display="flex" justifyContent="center">
         <GoogleLogin
-          clientId="687554768689-2tu8atvgbbs552iii4fh1lbdrjhonog5.apps.googleusercontent.com"
+          clientId={process.env.REACT_APP_GoogleClientID}
           render={(renderProps) => (
             <Button
               variant="outlined"

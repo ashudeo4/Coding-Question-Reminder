@@ -1,5 +1,0 @@
-{
-    "googleCliendId":"687554768689-2tu8atvgbbs552iii4fh1lbdrjhonog5.apps.googleusercontent.com",
-    "jwtSecret": "mysecrettoken",
-    "mongoURI":"mongodb://localhost:27017/reminder"
-}

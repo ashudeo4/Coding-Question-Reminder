@@ -1,9 +1,11 @@
 import {
   GET_LEETCODE_QUESTIONS,
   USER_QUESTIONS,
-  GET_ALGOEXPERT_QUESTION
+  GET_ALGOEXPERT_QUESTION,
+  GET_TODAY_QUESTIONS,
 } from "../action/types";
 const initialState = {
+  todayQuestions: [],
   leetcode: [],
   userQuestions: [],
   totalLeetcodeQuestions: null,
@@ -32,9 +34,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         algoexpert: payload.questionData,
-        totalAlgoexpertQuestions: payload.totalQuestion
+        totalAlgoexpertQuestions: payload.totalQuestion,
+      };
+    case GET_TODAY_QUESTIONS:
+      return {
+        ...state,
+        todayQuestions: [...payload.todayQuestions],
+      };
 
-      }
     default:
       return state;
   }

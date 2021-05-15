@@ -5,6 +5,8 @@ const UserQuestions = require("../models/UserQuestions");
 const loginMiddleware = require("../middlewares/auth");
 const Question = require("../models/Questions");
 const { BadRequest } = require("../utils/errors");
+const getTodayQuestion = require("../utils/getTodayQuestion");
+const Questions = require("../models/Questions");
 router.post("/", async (req, res, next) => {
   try {
     const { name, level, url } = req.body;
@@ -12,11 +14,26 @@ router.post("/", async (req, res, next) => {
       name: name.substring(name.indexOf(" ")),
       difficulty: level.toUpperCase(),
       link: url,
-      type: "LEETCODE"
+      type: "LEETCODE",
     };
-    await Question.create(questionData);//changing for Algoexpert
+    await Question.create(questionData); //changing for Algoexpert
     res.status(201).json({ message: "Question Added" });
   } catch (err) {
+    next(err);
+  }
+});
+router.get("/todayQuestions", loginMiddleware, async (req, res, next) => {
+  try {
+    const userQuestions = await UserQuestions.find({ userId: req.user.id });
+    const userQuestionIds = getTodayQuestion(userQuestions);
+    console.log(userQuestionIds);
+    const userQuestionsPromise = userQuestionIds.map((id) =>
+      Questions.findOne({ _id: id })
+    );
+    const todayQuestions = await Promise.all(userQuestionsPromise);
+    return res.status(200).json({ todayQuestions });
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 });
@@ -52,13 +69,13 @@ router.post("/reminder/:userId/:questionId", async (req, res, next) => {
     if (questionExists) {
       throw new BadRequest("Already reminder has been set");
     }
-    const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body
+    const { nextThreeDays, nextSevenDays, nextThirtyDays } = req.body;
 
     const reminderData = new UserQuestions({
       questionId: req.params.questionId,
       userId: req.params.userId,
       status: true,
-      type: req.body.type
+      type: req.body.type,
     });
     reminderData.dateReminder.push(
       nextThreeDays,
@@ -93,4 +110,5 @@ router.put("/reminder/:userId/:questionId", async (req, res, next) => {
     next(err);
   }
 });
+
 module.exports = router;

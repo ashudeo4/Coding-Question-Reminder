@@ -14,7 +14,6 @@ router.post("/", async (req, res, next) => {
       link: url,
       type: "LEETCODE"
     };
-    // console.log(req.body);
     await Question.create(questionData);//changing for Algoexpert
     res.status(201).json({ message: "Question Added" });
   } catch (err) {
@@ -36,7 +35,6 @@ router.get("/:type", async (req, res, next) => {
     if (questionData.length == 0) {
       throw new BadRequest(`No question available for ${type} platform`);
     }
-    console.log(questionData);
     return res
       .status(200)
       .json({ questionData, totalQuestion: questionData.length });
@@ -46,7 +44,6 @@ router.get("/:type", async (req, res, next) => {
 });
 
 router.post("/reminder/:userId/:questionId", async (req, res, next) => {
-  console.log(req.body);
   try {
     const questionExists = await UserQuestions.findOne({
       questionId: req.params.questionId,
@@ -61,6 +58,7 @@ router.post("/reminder/:userId/:questionId", async (req, res, next) => {
       questionId: req.params.questionId,
       userId: req.params.userId,
       status: true,
+      type: req.body.type
     });
     reminderData.dateReminder.push(
       nextThreeDays,

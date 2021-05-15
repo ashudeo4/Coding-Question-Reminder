@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_LEETCODE_QUESTIONS, USER_LEETCODE_QUESTIONS } from "./types";
+import { GET_LEETCODE_QUESTIONS, USER_QUESTIONS, GET_ALGOEXPERT_QUESTION } from "./types";
 import { setAlert } from "./alert";
 
 export const getLeetcodeQuestion = () => async (dispatch) => {
@@ -10,22 +10,29 @@ export const getLeetcodeQuestion = () => async (dispatch) => {
     console.log(err.message);
   }
 };
-
-export const userLeetcodeQuestions = () => async (dispatch) => {
+export const getAlgoexpertQuestion = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/api/question/algoexpert");
+    dispatch({ type: GET_ALGOEXPERT_QUESTION, payload: res.data });
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+export const getUserQuestions = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/question/user");
-    dispatch({ type: USER_LEETCODE_QUESTIONS, payload: res.data });
+    dispatch({ type: USER_QUESTIONS, payload: res.data });
   } catch (err) {
     console.log(err.message);
   }
 };
-export const setReminder = (userId, questionId, nextThreeDays, nextSevenDays, nextThirtyDays) => async (dispatch) => {
+export const setReminder = (userId, questionId, nextThreeDays, nextSevenDays, nextThirtyDays, type) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  const formData = { nextThreeDays, nextSevenDays, nextThirtyDays }
+  const formData = { nextThreeDays, nextSevenDays, nextThirtyDays, type }
   try {
     const res = await axios.post(
       `/api/question/reminder/${userId}/${questionId}`, formData,

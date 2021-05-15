@@ -19,7 +19,8 @@ const QuestionsList = ({
     userQuestions,
     setReminder,
     removeReminder,
-    userId
+    userId,
+    type
 }) => {
     const useStyles = makeStyles({
         root: {
@@ -39,7 +40,7 @@ const QuestionsList = ({
             const nextThreeDays = Moment().add(3, "days").toDate();
             const nextSevenDays = Moment().add(7, "days").toDate();
             const nextThirtyDays = Moment().add(30, "days").toDate();
-            setReminder(userId, ques._id, nextThreeDays, nextSevenDays, nextThirtyDays)
+            setReminder(userId, ques._id, nextThreeDays, nextSevenDays, nextThirtyDays, type)
             setStatus(true)
             const dates = [nextThreeDays, nextSevenDays, nextThirtyDays]
             const dateList = dates.map((date, index) => {

@@ -1,31 +1,41 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import Card from "../layout/SimpleCard";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import { connect } from "react-redux";
-import { getLeetcodeQuestion } from "../../action/question";
+import { getLeetcodeQuestion, getAlgoexpertQuestion, getUserQuestions } from "../../action/question";
 const Dashboard = ({
   getLeetcodeQuestion,
+  getAlgoexpertQuestion,
   leetcode,
+  algoexpert,
+  userQuestions,
+  totalAlgoexpertQuestions,
   totalLeetcodeQuestions,
+  getUserQuestions
 }) => {
   useEffect(() => {
+    getAlgoexpertQuestion();
     getLeetcodeQuestion();
-  }, [getLeetcodeQuestion]);
-  const [listOfPlatforms, setListOfPlatforms] = useState([
-    { id: 1, name: "Leetcode", totalQuestions: 75, completedQuestions: 15 },
-    { id: 2, name: "Algoexpert", totalQuestions: 150, completedQuestions: 50 },
-    { id: 3, name: "Custom", totalQuestions: 150, completedQuestions: 20 },
-    { id: 4, name: "Favorite", totalQuestions: 10, completedQuestions: 10 },
-  ]);
+    getUserQuestions();
+  }, [getLeetcodeQuestion, getAlgoexpertQuestion, getUserQuestions]);
+  let leetcodeCompletedQuestion = userQuestions.filter(ele => ele.type === "Leetcode").length
+  let algoexpertCompletedQuestion = userQuestions.filter(ele => ele.type === "Algoexpert").length
+  const listOfPlatforms = [
+    { id: 1, name: "Leetcode", totalQuestions: totalLeetcodeQuestions, completedQuestions: leetcodeCompletedQuestion, questions: leetcode },
+    { id: 2, name: "Algoexpert", totalQuestions: totalAlgoexpertQuestions, completedQuestions: algoexpertCompletedQuestion, questions: algoexpert },
+    // { id: 3, name: "Custom", totalQuestions: 150, completedQuestions: 20 },
+    // { id: 4, name: "Favorite", totalQuestions: 10, completedQuestions: 10 },
+  ];
   const Cards = listOfPlatforms.map((platform) => {
     return (
       <Grid item xs={12} sm={6}>
         <Card
           key={platform.id}
           name={platform.name}
-          totalQuestions={totalLeetcodeQuestions}
+          totalQuestions={platform.totalQuestions}
           completedQuestions={platform.completedQuestions}
+          questions={platform.questions}
         />
       </Grid>
     );
@@ -44,5 +54,8 @@ const Dashboard = ({
 const mapStateToProps = (state) => ({
   leetcode: state.question.leetcode,
   totalLeetcodeQuestions: state.question.totalLeetcodeQuestions,
+  totalAlgoexpertQuestions: state.question.totalAlgoexpertQuestions,
+  algoexpert: state.question.algoexpert,
+  userQuestions: state.question.userQuestions,
 });
-export default connect(mapStateToProps, { getLeetcodeQuestion })(Dashboard);
+export default connect(mapStateToProps, { getLeetcodeQuestion, getAlgoexpertQuestion, getUserQuestions })(Dashboard);

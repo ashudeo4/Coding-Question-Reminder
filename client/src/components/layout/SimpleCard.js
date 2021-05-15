@@ -41,8 +41,7 @@ const useStylesProgress = makeStyles((theme) => ({
   },
 }));
 
-const SimpleCard = ({ name, totalQuestions, completedQuestions, history }) => {
-  console.log(totalQuestions);
+const SimpleCard = ({ name, totalQuestions, completedQuestions, history, questions }) => {
   const classes = useStyles();
   const classesProgress = useStylesProgress();
   let progressValue = (completedQuestions / totalQuestions) * 100;
@@ -53,8 +52,11 @@ const SimpleCard = ({ name, totalQuestions, completedQuestions, history }) => {
     raised: false,
     shadow: 1,
   });
-  const cardDetail = () => {
-    return history.push("/questions");
+  const cardDetail = (questions) => {
+    return history.push({
+      pathname: "/questions",
+      state: { questions: questions, key: name }
+    });
   };
   return (
     <Card
@@ -65,7 +67,7 @@ const SimpleCard = ({ name, totalQuestions, completedQuestions, history }) => {
       raised={state.raised}
       zdepth={state.shadow}
       onClick={() => {
-        cardDetail();
+        cardDetail(questions);
       }}
     >
       <CardContent>

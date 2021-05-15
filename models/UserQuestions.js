@@ -13,6 +13,10 @@ const UserQuestionSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  type: {
+    type: String,
+    required: true,
+  },
   dateReminder: [{ type: Date }],
 });
 

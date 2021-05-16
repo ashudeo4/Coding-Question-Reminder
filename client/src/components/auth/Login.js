@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 import { login } from "../../action/auth";
 
 const Login = ({ login, isAuthenticated }) => {
-  console.log(process.env);
   const responseGoogle = async (googleData) => {
     login(googleData.tokenId);
   };
@@ -22,7 +21,7 @@ const Login = ({ login, isAuthenticated }) => {
       </Typography>
       <Box component="div" mt={5} display="flex" justifyContent="center">
         <GoogleLogin
-          clientId={process.env.REACT_APP_GoogleClientID}
+          clientId="687554768689-2tu8atvgbbs552iii4fh1lbdrjhonog5.apps.googleusercontent.com"
           render={(renderProps) => (
             <Button
               variant="outlined"

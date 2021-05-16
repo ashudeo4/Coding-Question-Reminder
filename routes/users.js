@@ -13,23 +13,27 @@ router.get("/", function (req, res, next) {
 
 //Register users
 router.post("/", async (req, res, next) => {
-  const { token } = req.body;
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.GoogleClientID,
-  });
-  const { name, email, picture } = ticket.getPayload();
   try {
-    const user = await User.findOne({ email });
-    if (user) {
-      throw new BadRequest("User already exits");
-    }
-    const savedUser = await User.create({ name, email, picture });
-    const payload = { user: { id: savedUser._id } };
-    const token = await jwt.sign(payload, process.env.JWTSECRET, {
-      expiresIn: 36000,
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GoogleClientID,
     });
-    return res.status(200).json({ token });
+    const { name, email, picture } = ticket.getPayload();
+    try {
+      const user = await User.findOne({ email });
+      if (user) {
+        throw new BadRequest("User already exits");
+      }
+      const savedUser = await User.create({ name, email, picture });
+      const payload = { user: { id: savedUser._id } };
+      const token = await jwt.sign(payload, process.env.JWTSECRET, {
+        expiresIn: 36000,
+      });
+      return res.status(200).json({ token });
+    } catch (err) {
+      next(err);
+    }
   } catch (err) {
     next(err);
   }

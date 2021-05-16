@@ -9,14 +9,14 @@ const getTodayQuestion = require("../utils/getTodayQuestion");
 const Questions = require("../models/Questions");
 router.post("/", async (req, res, next) => {
   try {
-    const { name, level, url } = req.body;
-    const questionData = {
-      name: name.substring(name.indexOf(" ")),
-      difficulty: level.toUpperCase(),
-      link: url,
-      type: "LEETCODE",
-    };
-    await Question.create(questionData); //changing for Algoexpert
+    // const { name, level, url } = req.body;
+    // const questionData = {
+    //   name: name.substring(name.indexOf(" ")),
+    //   difficulty: level.toUpperCase(),
+    //   link: url,
+    //   type: "LEETCODE",
+    // };
+    await Question.create(req.body); //changing for Algoexpert
     res.status(201).json({ message: "Question Added" });
   } catch (err) {
     next(err);

@@ -8,7 +8,6 @@ import {
 import { setAlert } from "./alert";
 export const getTodayQuestions = () => async (dispatch) => {
   try {
-    console.log("hit");
     const res = await axios.get("/api/question/todayQuestions");
     dispatch({ type: GET_TODAY_QUESTIONS, payload: res.data });
   } catch (err) {

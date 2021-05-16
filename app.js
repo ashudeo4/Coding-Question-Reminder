@@ -22,20 +22,18 @@ app.use(express.static("client/build"));
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/question", questionRouter);
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
+
+// serve static assests in production
+if (process.env.NODE_ENV === "production") {
+  // set static folder
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 app.use(handleErrors);
-
-//serve static assests in production
-// console.log(process.env.NODE_ENV);
-// if (process.env.NODE_ENV === "production") {
-//set static folder
-
-// }
 
 module.exports = app;

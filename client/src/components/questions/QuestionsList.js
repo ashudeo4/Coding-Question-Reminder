@@ -22,7 +22,6 @@ const QuestionsList = ({
   userId,
   type,
 }) => {
-  //   console.log(ques._id);
   const useStyles = makeStyles({
     root: {
       width: "100%",
@@ -31,16 +30,17 @@ const QuestionsList = ({
   const classes = useStyles();
   const [dateList, setDateList] = useState([]);
   const [status, setStatus] = useState(false);
-  //   console.log("hello", localStorage.getItem(ques._id));
+
   const changeStatus = (e) => {
     if (status) {
-      localStorage.setItem(ques._id, false);
       setStatus(false);
       removeReminder(userId, ques._id);
       setDateList([]);
+      localStorage.setItem(
+        ques._id,
+        JSON.stringify({ check: false, dates: [] })
+      );
     } else {
-      localStorage.setItem(ques._id, true);
-
       const nextThreeDays = Moment().add(3, "days").toDate();
       const nextSevenDays = Moment().add(7, "days").toDate();
       const nextThirtyDays = Moment().add(30, "days").toDate();
@@ -65,24 +65,35 @@ const QuestionsList = ({
         );
       });
       setDateList(dateList);
+      localStorage.setItem(
+        ques._id,
+        JSON.stringify({ check: true, dateList: [] })
+      );
     }
   };
 
   useEffect(() => {
-    setStatus(localStorage.getItem(ques._id) ? true : false);
+    setStatus(
+      localStorage.getItem(ques._id) &&
+        JSON.parse(localStorage.getItem(ques._id))["check"]
+        ? true
+        : false
+    );
     if (
       userQuestions.find((ele) => ele.questionId === ques._id) ||
-      localStorage.getItem(ques._id) === "true"
+      (localStorage.getItem(ques._id) &&
+        JSON.parse(localStorage.getItem(ques._id))["check"])
     ) {
-      console.log("yass");
       setStatus(true);
-      localStorage.setItem(ques._id, true);
+      localStorage.setItem(
+        ques._id,
+        JSON.stringify({ check: true, dates: [] })
+      );
     } else {
       setStatus(false);
     }
 
-    const id = ques._id;
-    const data = userQuestions.find((ele) => ele.questionId === id);
+    const data = userQuestions.find((ele) => ele.questionId === ques._id);
     if (data) {
       const component = data.dateReminder.map((date, index) => (
         <ListItem>
@@ -93,6 +104,7 @@ const QuestionsList = ({
         </ListItem>
       ));
       setDateList(component);
+    } else {
     }
   }, [userQuestions, ques._id]);
 

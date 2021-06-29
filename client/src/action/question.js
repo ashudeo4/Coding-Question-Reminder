@@ -22,14 +22,7 @@ export const getLeetcodeQuestion = () => async (dispatch) => {
     console.log(err.message);
   }
 };
-export const getAlgoexpertQuestion = () => async (dispatch) => {
-  try {
-    const res = await axios.get("/api/question/algoexpert");
-    dispatch({ type: GET_ALGOEXPERT_QUESTION, payload: res.data });
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+
 export const getUserQuestions = () => async (dispatch) => {
   try {
     const res = await axios.get("/api/question/user");

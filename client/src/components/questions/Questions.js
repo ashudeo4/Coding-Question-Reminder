@@ -19,6 +19,7 @@ const Questions = ({
   questions,
   platformName,
 }) => {
+  console.log();
   if (questions.length > 0) {
     localStorage.setItem(platformName, JSON.stringify(questions));
   } else {

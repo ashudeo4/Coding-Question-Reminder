@@ -29,7 +29,7 @@ const Dashboard = ({
   let leetcodeCompletedQuestion = userQuestions.filter(
     (ele) => ele.type === "Leetcode"
   ).length;
-
+  console.log("runn", leetcode);
   const listOfPlatforms = [
     {
       id: 1,
@@ -54,7 +54,7 @@ const Dashboard = ({
         </Box>
         {/* show loader and pass question data to Question component */}
 
-        {questionsLoading ? (
+        {questionsLoading || leetcode.length === 0 ? (
           <Skeleton animation="wave" height="100%" width="100%" />
         ) : (
           <Questions questions={leetcode} platformName="Leetcode" />

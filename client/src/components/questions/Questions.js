@@ -11,31 +11,29 @@ import {
 } from "../../action/question";
 
 import QuestionsList from "./QuestionsList";
-const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,platformName}) => {
+const Questions = ({
+  user,
+  setReminder,
+  removeReminder,
+  userQuestions,
+  questions,
+  platformName,
+}) => {
   if (questions.length > 0) {
-    localStorage.setItem(
-      platformName,
-      JSON.stringify(questions)
-    );
+    localStorage.setItem(platformName, JSON.stringify(questions));
   } else {
-    questions = JSON.parse(
-      localStorage.getItem(platformName)
-    );
+    questions = JSON.parse(localStorage.getItem(platformName));
   }
   if (user) {
     localStorage.setItem("user", JSON.stringify(user));
   } else {
     user = JSON.parse(localStorage.getItem("user"));
   }
-  const easyQuestion = questions.filter(
-    (ques) => ques.difficulty === "EASY"
-  );
+  const easyQuestion = questions.filter((ques) => ques.difficulty === "EASY");
   const mediumQuestion = questions.filter(
     (ques) => ques.difficulty === "MEDIUM"
   );
-  const hardQuestion = questions.filter(
-    (ques) => ques.difficulty === "HARD"
-  );
+  const hardQuestion = questions.filter((ques) => ques.difficulty === "HARD");
   const easy = easyQuestion.map((ques) => {
     return (
       <QuestionsList
@@ -72,28 +70,6 @@ const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,
       />
     );
   });
-  let columns = platformName === "Algoexpert" ? 3 : 4;
-  const veryhardQuestion =
-    platformName === "Algoexpert"
-      ? questions.filter(
-          (ques) => ques.difficulty === "VERYHARD"
-        )
-      : null;
-  const veryhard =
-    platformName === "Algoexpert"
-      ? veryhardQuestion.map((ques) => {
-          return (
-            <QuestionsList
-              ques={ques}
-              removeReminder={removeReminder}
-              userId={user._id}
-              setReminder={setReminder}
-              userQuestions={userQuestions}
-              type={platformName}
-            />
-          );
-        })
-      : null;
 
   const page = (
     <Box mx={5} py={5}>
@@ -101,7 +77,7 @@ const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,
         {platformName}
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={columns}>
+        <Grid item xs={12} sm={4}>
           <Box my={2}>
             <Typography variant="h4" color="primary" align="center">
               Easy
@@ -109,7 +85,7 @@ const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,
           </Box>
           {easy}
         </Grid>
-        <Grid item xs={12} sm={columns}>
+        <Grid item xs={12} sm={4}>
           <Box my={2}>
             <Typography variant="h4" color="primary" align="center">
               Medium
@@ -117,7 +93,7 @@ const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,
           </Box>
           {medium}
         </Grid>
-        <Grid item xs={12} sm={columns}>
+        <Grid item xs={12} sm={4}>
           <Box my={2}>
             <Typography variant="h4" color="primary" align="center">
               Hard
@@ -125,16 +101,6 @@ const Questions = ({ user, setReminder, removeReminder, userQuestions,questions,
           </Box>
           {hard}
         </Grid>
-        {platformName === "Algoexpert" ? (
-          <Grid item xs={12} sm={columns}>
-            <Box my={2}>
-              <Typography variant="h4" color="primary" align="center">
-                Very Hard
-              </Typography>
-            </Box>
-            {veryhard}
-          </Grid>
-        ) : null}
       </Grid>
     </Box>
   );

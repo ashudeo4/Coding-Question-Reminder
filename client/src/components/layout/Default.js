@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import { connect } from "react-redux";
-
-const Default = ({ isAuthenticated }) => {
+import { getAllUserCount } from "../../action/user";
+const Default = ({ isAuthenticated, allUserCount, getAllUserCount }) => {
+  useEffect(() => {
+    getAllUserCount();
+  }, [getAllUserCount]);
+  // console.log({ allUserCount });
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
@@ -27,8 +31,17 @@ const Default = ({ isAuthenticated }) => {
           align="center"
           mt={2}
         >
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod ipsum
-          ut temporibus odio
+          Repetition and Consistency is the key.
+        </Typography>
+        <Typography
+          variant="h6"
+          component="h2"
+          color="primary"
+          align="center"
+          mt={2}
+        >
+          User Count
+          <span> {allUserCount}</span>
         </Typography>
       </Box>
     </Box>
@@ -36,6 +49,6 @@ const Default = ({ isAuthenticated }) => {
 };
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-
-})
-export default connect(mapStateToProps, {})(Default);
+  allUserCount: state.user.allUserCount,
+});
+export default connect(mapStateToProps, { getAllUserCount })(Default);

@@ -38,4 +38,14 @@ router.post("/", async (req, res, next) => {
     next(err);
   }
 });
+
+//Get all user count
+router.get("/count", async (req, res, next) => {
+  try {
+    const userCount = await User.countDocuments();
+    return res.status(200).json({ userCount });
+  } catch (err) {
+    next(err);
+  }
+});
 module.exports = router;

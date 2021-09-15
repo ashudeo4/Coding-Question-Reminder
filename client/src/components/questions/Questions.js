@@ -19,7 +19,6 @@ const Questions = ({
   questions,
   platformName,
 }) => {
-  console.log();
   if (questions.length > 0) {
     localStorage.setItem(platformName, JSON.stringify(questions));
   } else {
@@ -73,7 +72,7 @@ const Questions = ({
   });
 
   const page = (
-    <Box mx={5} py={5}>
+    <Box py={5}>
       <Typography color="primary" variant="h3" align="center">
         {platformName}
       </Typography>

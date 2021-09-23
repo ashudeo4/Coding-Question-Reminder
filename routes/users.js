@@ -3,6 +3,7 @@ var router = express.Router();
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GoogleClientID);
+const bcrypt = require("bcryptjs");
 const { BadRequest } = require("../utils/errors");
 const User = require("../models/Users");
 require("dotenv").config();
@@ -11,8 +12,8 @@ router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
 
-//Register users
-router.post("/", async (req, res, next) => {
+//Register users using google
+router.post("/google", async (req, res, next) => {
   try {
     const { token } = req.body;
     const ticket = await client.verifyIdToken({
@@ -27,13 +28,39 @@ router.post("/", async (req, res, next) => {
       }
       const savedUser = await User.create({ name, email, picture });
       const payload = { user: { id: savedUser._id } };
-      const token = await jwt.sign(payload, process.env.JWTSECRET, {
+      const token = jwt.sign(payload, process.env.JWTSECRET, {
         expiresIn: 36000,
       });
       return res.status(200).json({ token });
     } catch (err) {
       next(err);
     }
+  } catch (err) {
+    next(err);
+  }
+});
+
+//Register users
+router.post("/", async (req, res, next) => {
+  const { email, password, name } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      throw new BadRequest("User already exits");
+    }
+    user = new User({
+      email,
+      password,
+      name,
+    });
+    const salt = bcrypt.genSaltSync(10);
+    user.password = await bcrypt.hash(password, salt);
+    const savedUser = await user.save();
+    const payload = { user: { id: savedUser._id } };
+    const token = jwt.sign(payload, process.env.JWTSECRET, {
+      expiresIn: 36000,
+    });
+    return res.status(200).json({ token });
   } catch (err) {
     next(err);
   }

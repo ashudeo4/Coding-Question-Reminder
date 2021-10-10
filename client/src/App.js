@@ -8,6 +8,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Dashboard from "./components/dashboard/Dashboard";
 import Questions from "./components/questions/Questions";
+import EditProfile from "./components/profile/EditProfile";
 import Alert from "./components/layout/Alert";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import { loadUser } from "./action/auth";
@@ -19,6 +20,7 @@ import store from "./store";
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -43,9 +45,9 @@ function App() {
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            {/* <Route exact path="/dashboard" component={Dashboard} /> */}
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
             <PrivateRoute exact path="/questions" component={Questions} />
+            <PrivateRoute exact path="/edit" component={EditProfile} />
           </Switch>
         </Router>
       </Provider>

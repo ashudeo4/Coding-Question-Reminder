@@ -55,7 +55,12 @@ const Dashboard = ({
         {/* show loader and pass question data to Question component */}
 
         {questionsLoading || leetcode.length === 0 ? (
-          <Skeleton animation="wave" height="100%" width="100%" />
+          <Skeleton
+            animation="wave"
+            height="100%"
+            width="100%"
+            variant="rect"
+          />
         ) : (
           <Questions questions={leetcode} platformName="Leetcode" />
         )}

@@ -2,6 +2,7 @@ import {
   GET_LEETCODE_QUESTIONS,
   USER_QUESTIONS,
   GET_TODAY_QUESTIONS,
+  CLEAR_QUESTIONS,
 } from "../action/types";
 const initialState = {
   todayQuestions: [],
@@ -33,7 +34,13 @@ export default function (state = initialState, action) {
         ...state,
         todayQuestions: [...payload.todayQuestions],
       };
-
+    case CLEAR_QUESTIONS:
+      return {
+        ...state,
+        userQuestions: [],
+        todayQuestions: [],
+        leetcode: [],
+      };
     default:
       return state;
   }

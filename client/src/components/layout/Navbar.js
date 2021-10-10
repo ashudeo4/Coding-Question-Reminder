@@ -52,7 +52,10 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
       <Link to="/login" style={{ color: "white", "text-decoration": "none" }}>
         <Button color="primary">Login</Button>
       </Link>
-      <Link to="/register" style={{ color: "white", "text-decoration": "none" }}>
+      <Link
+        to="/register"
+        style={{ color: "white", "text-decoration": "none" }}
+      >
         <Button color="primary">Sign Up</Button>
       </Link>
     </Toolbar>
@@ -94,13 +97,26 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         </MenuItem>
 
         <MenuItem style={{ color: "white" }}>
-          <Link style={{ color: "white", "text-decoration": "none" }} to="/dashboard">Dashboard</Link>
+          <Link
+            style={{ color: "white", "text-decoration": "none" }}
+            to="/dashboard"
+          >
+            Dashboard
+          </Link>
+        </MenuItem>
+        <MenuItem style={{ color: "white" }}>
+          <Link
+            style={{ color: "white", "text-decoration": "none" }}
+            to="/edit"
+          >
+            Edit
+          </Link>
         </MenuItem>
         <MenuItem style={{ color: "white" }} onClick={handleLogout}>
           Log Out
         </MenuItem>
       </Menu>
-    </Toolbar >
+    </Toolbar>
   );
   return (
     <AppBar position="static" color="secondary" elevation="0">

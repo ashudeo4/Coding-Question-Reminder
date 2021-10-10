@@ -10,9 +10,14 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  picture: {
+  password: {
     type: String,
     required: true,
+  },
+  picture: {
+    type: String,
+    required: false,
+    default: "noProfilePicture",
   },
   date: {
     type: Date,

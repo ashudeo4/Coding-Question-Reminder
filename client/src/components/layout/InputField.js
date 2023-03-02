@@ -15,13 +15,14 @@ const useStyles = makeStyles({
     marginBottom: "15px",
   },
 });
-const InputField = ({ value, placeholder, onChange }) => {
+const InputField = ({ value, placeholder, onChange, type }) => {
   const classes = useStyles();
   return (
     <input
       className={classes.textField}
       value={value}
       placeholder={placeholder}
+      type={type}
       onChange={(e) => onChange(e.target.value)}
     ></input>
   );

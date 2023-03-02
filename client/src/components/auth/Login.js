@@ -60,11 +60,13 @@ const Login = ({ loginGoogle, login, isAuthenticated }) => {
           <InputField
             value={email}
             placeholder="Email"
+            type="text"
             onChange={onChangeEmailHandler}
           />
           <InputField
             value={password}
             placeholder="Password"
+            type="password"
             onChange={onChangePasswordHandler}
           />
 

@@ -67,21 +67,25 @@ const Register = ({ registerGoogle, register, isAuthenticated }) => {
           <InputField
             value={name}
             placeholder="Name"
+            type="text"
             onChange={onChangeNameHandler}
           />
           <InputField
             value={email}
             placeholder="Email"
+            type="text"
             onChange={onChangeEmailHandler}
           />
           <InputField
             value={password}
             placeholder="Password"
+            type="password"
             onChange={onChangePasswordHandler}
           />
           <InputField
             value={password2}
             placeholder="Password Again"
+            type="password"
             onChange={onChangePassword2Handler}
           />
           <Button

@@ -1,20 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Card from "../layout/SimpleCard";
 import TaskCard from "../layout/TaskCard";
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
 import { connect } from "react-redux";
 import Questions from "../questions/Questions";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 import {
   getLeetcodeQuestion,
-  getAlgoexpertQuestion,
   getUserQuestions,
 } from "../../action/question";
 const Dashboard = ({
   getLeetcodeQuestion,
-  getAlgoexpertQuestion,
   leetcode,
   userQuestions,
   totalLeetcodeQuestions,

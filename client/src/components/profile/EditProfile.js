@@ -51,7 +51,7 @@ const EditProfile = ({ updatePassword }) => {
             size="large"
             onClick={() => submitHandler()}
           >
-            Sign Up
+            Submit
           </Button>
         </Box>
       </Box>

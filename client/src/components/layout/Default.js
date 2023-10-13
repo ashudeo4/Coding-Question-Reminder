@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { Box } from "@material-ui/core";
 import { connect } from "react-redux";
 import { getAllUserCount } from "../../action/user";
+import Sidebar from "./Sidebar"
 const Default = ({ isAuthenticated, allUserCount, getAllUserCount }) => {
   useEffect(() => {
     getAllUserCount();
@@ -42,6 +43,15 @@ const Default = ({ isAuthenticated, allUserCount, getAllUserCount }) => {
         >
           User Count
           <span> {allUserCount}</span>
+        </Typography>
+        <Typography
+          variant="h6"
+          component="h2"
+          color="primary"
+          align="center"
+          mt={2}
+        >
+        <Sidebar/>
         </Typography>
       </Box>
     </Box>

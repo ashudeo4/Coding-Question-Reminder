@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   GET_LEETCODE_QUESTIONS,
   USER_QUESTIONS,
-  GET_ALGOEXPERT_QUESTION,
   GET_TODAY_QUESTIONS,
 } from "./types";
 import { setAlert } from "./alert";
